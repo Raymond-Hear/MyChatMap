@@ -201,10 +201,19 @@
     }
     .btn-ghost:hover { color: var(--text); border-color: var(--border-hover); background: var(--bg-surface); }
     .hero-hint {
-      margin-top: 56px; font-size: 12px; color: var(--text-tertiary);
-      display: flex; align-items: center; gap: 16px;
+      margin-top: 56px; font-size: 12px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;
     }
-    .hero-hint span { display: flex; align-items: center; gap: 5px; }
+    .hero-hint span {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-secondary); font-weight: 500;
+    }
+    .hero-hint span svg { opacity: 0.7; }
     @media (max-width: 768px) {
       .hero h1 { font-size: 36px; letter-spacing: -1px; }
       .hero-sub { font-size: 15px; }
@@ -240,6 +249,13 @@
       padding-top: 48px;
     }
     .selling-item { text-align: center; }
+    .selling-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      margin-bottom: 12px; color: var(--accent);
+    }
+    .selling-icon svg { width: 20px; height: 20px; }
     .selling-item h3 {
       font-size: 15px; font-weight: 700; margin-bottom: 6px;
       background: linear-gradient(135deg, var(--text), var(--text-secondary));
@@ -283,9 +299,18 @@
     .feature-visual:hover { border-color: var(--border-hover); }
     .feature-visual .placeholder {
       color: var(--text-tertiary); font-size: 13px;
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      padding: 24px;
     }
-    .feature-visual .placeholder svg { width: 32px; height: 32px; opacity: 0.3; }
+    .feature-visual .placeholder svg { width: 36px; height: 36px; opacity: 0.2; }
+    .feature-visual .placeholder .placeholder-label { font-weight: 500; }
+    .feature-visual .placeholder .placeholder-hint {
+      font-size: 11px; color: var(--text-tertiary); opacity: 0.5;
+      margin-top: 2px;
+    }
+    .feature-visual .screenshot {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
     .feature-visual img { width: 100%; height: 100%; object-fit: cover; }
     .feature-divider {
       max-width: 1000px; margin: 0 auto;
@@ -441,18 +466,30 @@
   <section class="selling-points">
     <div class="selling-grid">
       <div class="selling-item reveal">
+        <div class="selling-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
         <h3>快速</h3>
         <p>悬停即展开目录<br>点击即跳转消息</p>
       </div>
       <div class="selling-item reveal reveal-delay-1">
+        <div class="selling-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93"/><path d="M8.56 6.22A4 4 0 0 1 12 2"/><circle cx="12" cy="14" r="4"/><path d="M12 18v4"/><path d="M8 18l-2 2"/><path d="M16 18l2 2"/><path d="M12 2v-0.01"/><path d="M2 12h4"/><path d="M18 12h4"/><circle cx="12" cy="12" r="10" stroke-dasharray="3 3" stroke-opacity="0.3"/></svg>
+        </div>
         <h3>智能</h3>
         <p>自动识别对话<br>实时生成导航</p>
       </div>
       <div class="selling-item reveal reveal-delay-2">
+        <div class="selling-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><line x1="12" y1="12" x2="6" y2="6"/><line x1="12" y1="12" x2="18" y2="6"/><line x1="12" y1="12" x2="6" y2="18"/><line x1="12" y1="12" x2="18" y2="18"/></svg>
+        </div>
         <h3>可视</h3>
         <p>知识图谱展示<br>发现对话关联</p>
       </div>
       <div class="selling-item reveal reveal-delay-3">
+        <div class="selling-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
         <h3>安全</h3>
         <p>数据仅存本地<br>不上传任何内容</p>
       </div>
@@ -475,7 +512,8 @@
       <div class="feature-visual reveal reveal-delay-2">
         <div class="placeholder">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>
-          目录导航截图
+          <span class="placeholder-label">目录导航截图</span>
+          <span class="placeholder-hint">替换为 img 标签加载截图</span>
         </div>
       </div>
     </div>
@@ -498,7 +536,8 @@
       <div class="feature-visual reveal reveal-delay-2">
         <div class="placeholder">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          标签管理截图
+          <span class="placeholder-label">标签管理截图</span>
+          <span class="placeholder-hint">替换为 img 标签加载截图</span>
         </div>
       </div>
     </div>
@@ -521,7 +560,8 @@
       <div class="feature-visual reveal reveal-delay-2">
         <div class="placeholder">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="2"/><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><line x1="12" y1="12" x2="6" y2="6"/><line x1="12" y1="12" x2="18" y2="6"/></svg>
-          知识图谱截图
+          <span class="placeholder-label">知识图谱截图</span>
+          <span class="placeholder-hint">替换为 img 标签加载截图</span>
         </div>
       </div>
     </div>
@@ -544,7 +584,8 @@
       <div class="feature-visual reveal reveal-delay-2">
         <div class="placeholder">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          导出功能截图
+          <span class="placeholder-label">导出功能截图</span>
+          <span class="placeholder-hint">替换为 img 标签加载截图</span>
         </div>
       </div>
     </div>
@@ -634,9 +675,9 @@
       <a href="https://github.com/Raymond-Hear/MyChatMap" target="_blank">GitHub</a>
       <a href="https://github.com/Raymond-Hear/MyChatMap" target="_blank">项目主页</a>
       <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>
-      <a href="https://github.com/Raymond-Hear" target="_blank">Raymond-Hear</a>
+      <a href="https://github.com/Raymond-Hear" target="_blank">聆风Raymond</a>
     </div>
-    <div class="footer-copy">Made by <a href="https://github.com/Raymond-Hear" target="_blank" style="color:var(--text-secondary);">Raymond-Hear</a> · MyChatMap v0.2.0 · &copy; 2026</div>
+    <div class="footer-copy">Made by <a href="https://github.com/Raymond-Hear" target="_blank" style="color:var(--text-secondary);">聆风Raymond</a> · MyChatMap v0.2.0 · &copy; 2026</div>
   </footer>
 
   <script>
