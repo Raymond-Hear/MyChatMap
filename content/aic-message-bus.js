@@ -1,4 +1,4 @@
-// ChatMap - 消息通信封装
+// MyChatMap - 消息通信封装
 // Content Script 与 Service Worker 之间的通信层
 
 const AIC_MessageBus = {
@@ -11,11 +11,11 @@ const AIC_MessageBus = {
       if (response && response.success) {
         return response.data;
       } else {
-        console.error('[ChatMap] 消息发送失败:', response?.error);
+        console.error('[MyChatMap] 消息发送失败:', response?.error);
         return null;
       }
     } catch (err) {
-      console.error('[ChatMap] 通信错误:', err);
+      console.error('[MyChatMap] 通信错误:', err);
       return null;
     }
   },

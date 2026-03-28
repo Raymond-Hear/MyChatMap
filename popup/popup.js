@@ -1,4 +1,4 @@
-// ChatMap - Popup 面板逻辑
+// MyChatMap - Popup 面板逻辑
 // 负责：显示当前对话目录、标签管理、导出功能、图谱预览
 
 (async function () {
@@ -63,7 +63,7 @@
       });
       document.getElementById('btnOpenFullGraph').addEventListener('click', openFullGraph);
     } catch (err) {
-      console.error('[ChatMap] Popup 初始化失败:', err);
+      console.error('[MyChatMap] Popup 初始化失败:', err);
       statusText.textContent = '初始化失败';
     }
   }
@@ -517,7 +517,7 @@
   // ========== 图谱 ==========
 
   function openFullGraph() {
-    chrome.tabs.create({ url: chrome.runtime.getURL('chatmap-graph.html') });
+    chrome.tabs.create({ url: chrome.runtime.getURL('mychatmap-graph.html') });
   }
 
   // ========== 工具函数补充 ==========

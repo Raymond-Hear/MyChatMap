@@ -1,4 +1,4 @@
-// ChatMap - 知识图谱完整版（新 Tab 页）
+// MyChatMap - 知识图谱完整版（新 Tab 页）
 (async function() {
   'use strict';
 

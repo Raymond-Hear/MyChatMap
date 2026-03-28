@@ -1,4 +1,4 @@
-// ChatMap - 数据库定义（Dexie.js）
+// MyChatMap - 数据库定义（Dexie.js）
 // 仅在 Service Worker 中使用
 
 import Dexie from '../lib/dexie.mjs';

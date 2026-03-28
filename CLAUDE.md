@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**ChatMap** (formerly AI对话目录插件) is a Chrome browser extension (Manifest V3) that provides message-level catalog navigation and knowledge graph management for AI chat platforms including Doubao and Tencent Yuanbao. It generates a real-time table of contents for long conversations, allowing users to quickly jump to any message.
+**MyChatMap** (formerly AI对话目录插件) is a Chrome browser extension (Manifest V3) that provides message-level catalog navigation and knowledge graph management for AI chat platforms including Doubao and Tencent Yuanbao. It generates a real-time table of contents for long conversations, allowing users to quickly jump to any message.
 
 > **v0.2.0**: Only Doubao (豆包) and Tencent Yuanbao (腾讯元宝) are supported. Kimi and DeepSeek adapters have been removed. New features: tag management and knowledge graph view (vis-network).
 
@@ -24,7 +24,7 @@ manifest.json
 │       ├── aic-base.js             # Base adapter class
 │       ├── aic-doubao.js           # Doubao (doubao.com)
 │       └── aic-yuanbao.js          # Tencent Yuanbao
-├── chatmap-graph.html              # Knowledge graph page (new tab)
+├── mychatmap-graph.html              # Knowledge graph page (new tab)
 ├── popup/                          # Extension popup panel
 │   ├── popup.html
 │   └── popup.js

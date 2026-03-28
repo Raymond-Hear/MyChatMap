@@ -1,4 +1,4 @@
-// ChatMap - Service Worker（数据访问层）
+// MyChatMap - Service Worker（数据访问层）
 // 所有数据操作的唯一入口
 
 import db from '../shared/db.js';
@@ -289,7 +289,7 @@ async function saveSetting(key, value) {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   handleMessage(message, sender).then(sendResponse).catch(err => {
-    console.error('[ChatMap] Service Worker error:', err);
+    console.error('[MyChatMap] Service Worker error:', err);
     sendResponse({ success: false, error: err.message });
   });
   return true; // 保持异步响应通道
@@ -372,9 +372,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'install') {
     // 首次安装，初始化默认设置
     await saveSetting(SETTING_PROCESS_HISTORY, false);
-    console.log('[ChatMap] 插件已安装');
+    console.log('[MyChatMap] 插件已安装');
   } else if (details.reason === 'update') {
     // 更新时保留数据，Dexie.js自动处理版本迁移
-    console.log(`[ChatMap] 插件已更新：${details.previousVersion} → ${VERSION}`);
+    console.log(`[MyChatMap] 插件已更新：${details.previousVersion} → ${VERSION}`);
   }
 });

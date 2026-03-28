@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "ChatMap",
+  "name": "MyChatMap",
   "version": "0.2.0",
   "description": "为豆包、腾讯元宝提供对话目录导航、标签分类和知识图谱管理",
   "permissions": [

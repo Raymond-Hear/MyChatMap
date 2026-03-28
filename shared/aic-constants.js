@@ -1,9 +1,9 @@
-// ChatMap - 常量定义
+// MyChatMap - 常量定义
 
 const AIC_CONSTANTS = {
   // 插件信息
   VERSION: '0.2.0',
-  NAME: 'ChatMap',
+  NAME: 'MyChatMap',
 
   // 消息类型 - 对话
   MSG_SAVE_CONVERSATION: 'SAVE_CONVERSATION',
