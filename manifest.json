@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "ChatMap",
+  "version": "0.2.0",
+  "description": "为豆包、腾讯元宝提供对话目录导航、标签分类和知识图谱管理",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.doubao.com/*",
+        "https://doubao.com/*",
+        "https://yuanbao.tencent.com/*"
+      ],
+      "js": [
+        "shared/aic-constants.js",
+        "shared/aic-utils.js",
+        "content/aic-message-bus.js",
+        "content/adapters/aic-base.js",
+        "content/adapters/aic-doubao.js",
+        "content/adapters/aic-yuanbao.js",
+        "content/aic-scroll-tracker.js",
+        "content/aic-catalog-ui.js",
+        "content/aic-main.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

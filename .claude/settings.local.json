@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Write",
+      "Bash(cd:*)",
+      "Edit",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(dir:*)",
+      "WebFetch",
+      "Bash(git:*)",
+      "Bash(reg:*)",
+      "Bash(copy:*)",
+      "Bash(cp:*)",
+      "Read(D:\\浏览器下载\\（千问）Chrome插件存储方案对比.pdf)",
+      "Read(D:\\浏览器下载\\（豆包）针对你开发的AI对话存储插件，我将从技术特性、性能表现、开发实践等多个维度深入分析四种存储方案的适用性，并提供具体的技术建议和最佳实践。.md)",
+      "Bash(curl:*)",
+      "Bash(node:*)",
+      "Bash(mkdir:*)",
+      "mcp__acp__Write",
+      "mcp__acp__Edit",
+      "Bash(python -c:*)"
+    ]
+  },
+  "outputStyle": "Default"
+}

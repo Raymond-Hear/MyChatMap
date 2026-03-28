@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatMap - 知识图谱</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8f9fa;
+      overflow: hidden;
+    }
+
+    /* 顶部工具栏 */
+    .toolbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 56px;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .toolbar-logo {
+      font-size: 18px; font-weight: 700; color: #4285f4;
+    }
+    .toolbar-stats {
+      font-size: 12px; color: #888;
+    }
+    .toolbar-spacer { flex: 1; }
+
+    /* 标签筛选区 */
+    .tag-filter {
+      display: flex; gap: 6px; align-items: center;
+      flex-wrap: nowrap; overflow-x: auto;
+    }
+    .tag-filter-label {
+      font-size: 12px; color: #666; flex-shrink: 0;
+    }
+    .tag-filter-pill {
+      padding: 3px 10px; border-radius: 12px;
+      font-size: 11px; color: #fff; cursor: pointer;
+      white-space: nowrap; transition: opacity 0.15s;
+    }
+    .tag-filter-pill.active { opacity: 1; }
+    .tag-filter-pill:not(.active) { opacity: 0.4; }
+    .tag-filter-all {
+      padding: 3px 10px; border-radius: 12px;
+      font-size: 11px; background: #eee; color: #555;
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+    }
+    .tag-filter-all.active { background: #4285f4; color: #fff; }
+
+    /* 图谱容器 */
+    #graphContainer {
+      position: fixed;
+      top: 56px; left: 0; right: 0; bottom: 0;
+    }
+
+    /* 右侧详情面板 */
+    .detail-panel {
+      position: fixed;
+      top: 56px; right: 0; bottom: 0;
+      width: 320px;
+      background: #fff;
+      border-left: 1px solid #e0e0e0;
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 99;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.06);
+    }
+    .detail-panel.open { transform: translateX(0); }
+    .detail-title {
+      font-size: 16px; font-weight: 600; margin-bottom: 8px;
+      padding-right: 24px;
+    }
+    .detail-meta {
+      font-size: 12px; color: #888; margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .detail-tags { margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 4px; }
+    .detail-tag {
+      display: inline-block; padding: 2px 8px; border-radius: 10px;
+      font-size: 11px; color: #fff;
+    }
+    .detail-messages {
+      font-size: 12px; color: #666;
+      max-height: 400px; overflow-y: auto;
+    }
+    .detail-messages::-webkit-scrollbar { width: 4px; }
+    .detail-messages::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+    .detail-msg-item {
+      margin-bottom: 6px; padding: 6px 8px; background: #f8f8f8; border-radius: 6px;
+    }
+    .detail-msg-role {
+      font-weight: 600; font-size: 11px; margin-bottom: 2px;
+    }
+    .detail-msg-content {
+      color: #555; line-height: 1.5;
+      max-height: 60px; overflow: hidden;
+    }
+    .detail-close {
+      position: absolute; top: 12px; right: 12px;
+      cursor: pointer; font-size: 16px; color: #999;
+      width: 24px; height: 24px; display: flex;
+      align-items: center; justify-content: center;
+      border-radius: 4px;
+    }
+    .detail-close:hover { color: #333; background: #f0f0f0; }
+    .detail-open-btn {
+      display: inline-block; padding: 6px 14px; border: none;
+      border-radius: 6px; background: #4285f4; color: #fff;
+      font-size: 12px; cursor: pointer; margin-bottom: 12px;
+    }
+    .detail-open-btn:hover { background: #3367d6; }
+
+    /* 底部图例 */
+    .legend {
+      position: fixed;
+      bottom: 16px; left: 16px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 11px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      z-index: 99;
+    }
+    .legend-title {
+      font-weight: 600; margin-bottom: 6px; color: #333;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 6px; margin-bottom: 4px; color: #666;
+    }
+    .legend-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .legend-line {
+      width: 20px; height: 2px; border-radius: 1px; flex-shrink: 0;
+    }
+
+    /* 空状态 */
+    .empty-state {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: calc(100vh - 56px);
+      color: #bbb; font-size: 14px;
+    }
+    .empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state-sub { font-size: 12px; color: #ccc; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <!-- 顶部工具栏 -->
+  <div class="toolbar">
+    <span class="toolbar-logo">ChatMap</span>
+    <span class="toolbar-stats" id="statsText">加载中...</span>
+    <span class="toolbar-spacer"></span>
+    <div class="tag-filter" id="tagFilter">
+      <span class="tag-filter-label">筛选：</span>
+      <span class="tag-filter-all active" id="filterAll">全部</span>
+    </div>
+  </div>
+
+  <!-- 图谱容器 -->
+  <div id="graphContainer"></div>
+
+  <!-- 右侧详情面板 -->
+  <div class="detail-panel" id="detailPanel">
+    <span class="detail-close" id="detailClose">✕</span>
+    <div id="detailContent"></div>
+  </div>
+
+  <!-- 底部图例 -->
+  <div class="legend" id="legend"></div>
+
+  <script src="lib/vis-network.min.js"></script>
+  <script src="popup/chatmap-graph.js"></script>
+</body>
+</html>

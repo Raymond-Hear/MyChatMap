@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatMap</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 340px;
+      min-height: 400px;
+      max-height: 560px;
+      overflow-y: auto;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 13px;
+      color: #333;
+      background: #fafafa;
+    }
+
+    /* 头部 */
+    .header {
+      padding: 16px;
+      background: linear-gradient(135deg, #4285f4, #5b9bf7);
+      color: #fff;
+    }
+    .header h1 {
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .header p {
+      font-size: 11px;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    /* 分区 */
+    .section {
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* 当前对话目录 */
+    .catalog-list {
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .catalog-list::-webkit-scrollbar { width: 4px; }
+    .catalog-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+
+    .catalog-item {
+      padding: 6px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #444;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .catalog-item:hover { background: rgba(66, 133, 244, 0.08); color: #1a73e8; }
+    .catalog-item-index {
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #eee;
+      color: #999;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .catalog-item-text {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .empty-hint {
+      color: #bbb;
+      font-size: 12px;
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    /* 按钮 */
+    .btn-group { display: flex; flex-direction: column; gap: 8px; }
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .btn-primary {
+      background: #4285f4;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #3367d6; }
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #444;
+    }
+    .btn-secondary:hover { background: #e0e0e0; }
+    .btn-danger {
+      background: #fff;
+      color: #e74c3c;
+      border: 1px solid #e74c3c;
+    }
+    .btn-danger:hover { background: #fef0ef; }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* 底部 */
+    .footer {
+      padding: 12px 16px;
+      text-align: center;
+      color: #aaa;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer a {
+      color: #4285f4;
+      text-decoration: none;
+    }
+    .footer a:hover { text-decoration: underline; }
+
+    /* 状态信息 */
+    .status-bar {
+      padding: 8px 16px;
+      background: #f5f5f5;
+      font-size: 11px;
+      color: #888;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4caf50;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .status-dot.inactive { background: #ccc; }
+
+    /* 对话列表 */
+    .conv-list {
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    .conv-item {
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      transition: background 0.15s;
+    }
+    .conv-item:hover { background: #f0f0f0; }
+    .conv-platform {
+      flex-shrink: 0;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #e8f0fe;
+      color: #4285f4;
+    }
+    .conv-title {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .conv-time {
+      flex-shrink: 0;
+      font-size: 10px;
+      color: #bbb;
+    }
+
+    /* 标签管理 */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+      min-height: 24px;
+    }
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      color: #fff;
+      cursor: default;
+      white-space: nowrap;
+    }
+    .tag-pill-close {
+      cursor: pointer;
+      opacity: 0.7;
+      font-size: 10px;
+      margin-left: 2px;
+    }
+    .tag-pill-close:hover { opacity: 1; }
+    .tag-pill-label { cursor: text; }
+    .btn-small {
+      padding: 4px 10px;
+      font-size: 11px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .tag-input-area {
+      margin-bottom: 8px;
+    }
+    .tag-input {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 12px;
+      outline: none;
+    }
+    .tag-input:focus { border-color: #4285f4; }
+    .color-picker {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .color-swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .color-swatch.selected { border-color: #333; }
+    .color-swatch:hover { transform: scale(1.15); }
+
+    /* 对话标签行 */
+    .conv-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+      padding-left: 42px;
+    }
+    .conv-tag {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 8px;
+      font-size: 9px;
+      color: #fff;
+      line-height: 1.4;
+    }
+    .conv-tag-add {
+      font-size: 9px;
+      color: #999;
+      cursor: pointer;
+      padding: 1px 4px;
+      border-radius: 8px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .conv-tag-add:hover { color: #4285f4; background: rgba(66,133,244,0.08); }
+
+    /* 标签下拉面板 */
+    .tag-dropdown {
+      position: fixed;
+      z-index: 9999;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 6px;
+      min-width: 160px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .tag-dropdown-item {
+      padding: 5px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+    .tag-dropdown-item:hover { background: #f0f0f0; }
+    .tag-dropdown-item.active { background: rgba(66,133,244,0.1); }
+    .tag-dropdown-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* 图谱预览模态框 */
+    .graph-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+    }
+    .graph-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .graph-modal-close {
+      cursor: pointer;
+      font-size: 16px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+    .graph-modal-close:hover { background: rgba(255,255,255,0.2); }
+    .graph-modal-body {
+      flex: 1;
+      background: #fff;
+      border-radius: 8px;
+      min-height: 280px;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <!-- 头部 -->
+  <div class="header">
+    <h1>🧭 ChatMap</h1>
+    <p>AI 对话目录导航 & 知识图谱</p>
+  </div>
+
+  <!-- 状态栏 -->
+  <div class="status-bar">
+    <span><span class="status-dot" id="statusDot"></span><span id="statusText">检测中...</span></span>
+    <span id="convCount">0 条对话</span>
+  </div>
+
+  <!-- 已存对话 -->
+  <div class="section">
+    <div class="section-title">💾 已存对话</div>
+    <div class="conv-list" id="convList">
+      <div class="empty-hint" id="convEmpty">暂无保存的对话</div>
+    </div>
+  </div>
+
+  <!-- 标签管理 -->
+  <div class="section">
+    <div class="section-title">🏷️ 标签管理</div>
+    <div class="tag-list" id="tagList">
+      <div class="empty-hint" id="tagEmpty">暂无标签，点击下方新建</div>
+    </div>
+    <div class="tag-input-area" id="tagInputArea" style="display:none;">
+      <input type="text" class="tag-input" id="newTagInput" placeholder="输入标签名..." maxlength="20">
+      <div class="color-picker" id="colorPicker"></div>
+    </div>
+    <button class="btn btn-secondary btn-small" id="btnNewTag" style="background:#f0f0f0;color:#444;">+ 新建标签</button>
+  </div>
+
+  <!-- 导出 & 图谱 -->
+  <div class="section">
+    <div class="section-title">📤 导出 & 图谱</div>
+    <div class="btn-group">
+      <button class="btn btn-primary" id="btnExportCurrent" disabled>导出当前对话 (Markdown)</button>
+      <button class="btn btn-secondary" id="btnExportAll" disabled>导出所有对话 (ZIP)</button>
+      <button class="btn btn-secondary" id="btnOpenGraph" style="background:#f0f0f0;color:#444;">打开知识图谱</button>
+    </div>
+  </div>
+
+  <!-- 设置 -->
+  <div class="section">
+    <div class="section-title">⚙️ 设置</div>
+    <div class="btn-group">
+      <button class="btn btn-danger" id="btnClearAll">清理所有数据</button>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer">
+    <div>v0.2.0 · 适用于豆包和腾讯元宝</div>
+    <div>所有数据仅存本地，可放心使用</div>
+    <div>作者：<a href="https://github.com/Raymond-Hear" target="_blank">聆风Raymond</a></div>
+  </div>
+
+  <!-- 图谱预览模态框 -->
+  <div class="graph-modal" id="graphModal" style="display:none;">
+    <div class="graph-modal-header">
+      <span>知识图谱预览</span>
+      <span class="graph-modal-close" id="graphModalClose">✕</span>
+    </div>
+    <div class="graph-modal-body" id="graphPreview"></div>
+    <button class="btn btn-primary" id="btnOpenFullGraph" style="width:100%;margin-top:8px;">
+      打开完整图谱
+    </button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
