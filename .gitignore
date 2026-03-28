@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Build
+dist/
+*.zip
+
+# Environment
+.env
+.env.local
+
+# Claude
+.claude/
+.claude-context/
+
+# Project docs (not needed in repo)
+CLAUDE.md
+项目进度表.md
+项目复盘-AI对话目录插件.md
+【PRD】*
