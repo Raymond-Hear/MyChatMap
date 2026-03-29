@@ -51,6 +51,10 @@
       // 标签管理
       await loadTags();
       document.getElementById('btnNewTag').addEventListener('click', showTagInput);
+      document.getElementById('btnConfirmTag').addEventListener('click', createNewTag);
+      document.getElementById('btnCancelTag').addEventListener('click', () => {
+        document.getElementById('tagInputArea').style.display = 'none';
+      });
       document.getElementById('newTagInput').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') createNewTag();
         if (e.key === 'Escape') document.getElementById('tagInputArea').style.display = 'none';
@@ -364,15 +368,15 @@
     const tagList = document.getElementById('tagList');
     const tagEmpty = document.getElementById('tagEmpty');
 
+    tagList.innerHTML = '';
+
     if (tags.length === 0) {
       tagEmpty.style.display = '';
-      tagList.innerHTML = '';
       tagList.appendChild(tagEmpty);
       return;
     }
 
     tagEmpty.style.display = 'none';
-    tagList.innerHTML = '';
 
     tags.forEach(tag => {
       const pill = document.createElement('span');
