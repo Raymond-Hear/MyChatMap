@@ -11,6 +11,7 @@
 <p align="center">
   <a href="https://github.com/Raymond-Hear/MyChatMap/releases/latest">下载安装</a> ·
   <a href="https://mychatmap.lingfengraymond.top/">产品主页</a> ·
+  <a href="https://github.com/Raymond-Hear/MyChatMap/issues">意见反馈</a> ·
   <a href="https://opensource.org/licenses/MIT">MIT License</a>
 </p>
 
@@ -105,9 +106,6 @@ MyChatMap/
 │   ├── aic-constants.js          # 常量定义
 │   ├── aic-utils.js              # 工具函数
 │   └── db.js                     # 数据库 Schema
-├── landing/                      # 产品落地页
-│   ├── index.html
-│   └── assets/
 ├── lib/                          # 第三方库
 │   ├── dexie.mjs
 │   ├── jszip.min.js
@@ -153,5 +151,5 @@ MyChatMap/
 ---
 
 <p align="center">
-  Made by <a href="https://github.com/Raymond-Hear">Raymond-Hear</a>
+  Made by <a href="https://github.com/Raymond-Hear">聆风Raymond</a>
 </p>
