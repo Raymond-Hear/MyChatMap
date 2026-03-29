@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/Raymond-Hear/MyChatMap/releases/latest">下载安装</a> ·
-  <a href="https://raymond-hear.github.io/MyChatMap/">产品主页</a> ·
+  <a href="https://mychatmap.lingfengraymond.top/">产品主页</a> ·
   <a href="https://opensource.org/licenses/MIT">MIT License</a>
 </p>
 
