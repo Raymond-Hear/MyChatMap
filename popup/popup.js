@@ -368,11 +368,13 @@
     const tagList = document.getElementById('tagList');
     const tagEmpty = document.getElementById('tagEmpty');
 
-    tagList.innerHTML = '';
+    // Remove all children except tagEmpty
+    Array.from(tagList.children).forEach(child => {
+      if (child.id !== 'tagEmpty') tagList.removeChild(child);
+    });
 
     if (tags.length === 0) {
       tagEmpty.style.display = '';
-      tagList.appendChild(tagEmpty);
       return;
     }
 
